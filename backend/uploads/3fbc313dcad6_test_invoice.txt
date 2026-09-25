@@ -1,0 +1,6 @@
+INVOICE #INV-9999
+Vendor: Alpha Cloud
+Date: 2026-09-20
+Total Amount: .00
+Subtotal: .00
+Tax: .00

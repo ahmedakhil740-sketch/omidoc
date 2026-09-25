@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniDoc AI — Intelligent Document Processing &amp; Knowledge Discovery Platform</title>
+  <meta name="description" content="Enterprise-grade AI-powered Intelligent Document Processing platform. Autonomous classification, multi-schema extraction, anomaly validation, grounded AI chat, and actionable business insights.">
+  
+  <!-- Modern Typography Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Feather / Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="dark-theme">
+  <!-- Glowing Ambient Background Gradients -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Main App Container -->
+  <div id="app" class="app-layout">
+    
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="logo-icon">
+            <i data-lucide="layers"></i>
+          </div>
+          <div class="brand-text">
+            <h2>OmniDoc <span class="gradient-text">AI</span></h2>
+            <span class="badge-sub">Intelligent IDP Studio</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Demo Navigator -->
+      <div class="demo-selector-box">
+        <div class="demo-box-label">
+          <i data-lucide="sparkles"></i> <span>Live Hackathon Demos</span>
+        </div>
+        <select id="quickDemoSelect" class="demo-dropdown" aria-label="Select Demo Document">
+          <option value="" disabled selected>⚡ Load Sample Scenario...</option>
+          <option value="1">📄 1. Valid Cloud Invoice (Acme Logistics)</option>
+          <option value="2">⚖️ 2. High-Risk Contract (Uncapped MSA)</option>
+          <option value="3">⚠️ 3. Math Error Invoice (Apex Global)</option>
+          <option value="4">🚨 4. Failed Safety Audit (BioMed Lab)</option>
+          <option value="5">🛂 5. Expiring Passport KYC (Elena Rostova)</option>
+        </select>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">PLATFORM</div>
+        <button class="nav-item active" data-view="dashboard" id="navDashboard">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard &amp; KPIs</span>
+        </button>
+        <button class="nav-item" data-view="documents" id="navDocuments">
+          <i data-lucide="files"></i>
+          <span>Document Queue</span>
+          <span class="nav-badge" id="sidebarDocCount">5</span>
+        </button>
+        <button class="nav-item" data-view="upload" id="navUpload">
+          <i data-lucide="upload-cloud"></i>
+          <span>Upload &amp; Process</span>
+        </button>
+        <button class="nav-item" data-view="studio" id="navStudio">
+          <i data-lucide="cpu"></i>
+          <span>Document Intelligence</span>
+        </button>
+        <button class="nav-item" data-view="portfolio" id="navPortfolio">
+          <i data-lucide="network"></i>
+          <span>Cross-Doc Insights</span>
+        </button>
+
+        <div class="nav-section-label">SYSTEM &amp; AUDIT</div>
+        <div class="demo-auth-card">
+          <div class="user-avatar-wrap">
+            <div class="avatar-ring">
+              <span id="userInitial">SM</span>
+            </div>
+            <div class="user-info-text">
+              <strong id="userDisplayName">Dr. Sarah Mitchell</strong>
+              <small id="userRole">Lead Compliance Officer</small>
+            </div>
+          </div>
+          <button class="btn-demo-auth" id="btnSwitchAuth">
+            <i data-lucide="log-in"></i> <span id="authBtnText">Demo Signed In</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="system-status-indicator">
+          <span class="status-dot pulse"></span>
+          <span>AI Pipeline: Online (v2.0)</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Global Bar -->
+      <header class="topbar">
+        <div class="topbar-search">
+          <i data-lucide="search"></i>
+          <input type="text" id="globalSearchInput" placeholder="Search by vendor, document ID, entity, clause..." />
+        </div>
+
+        <div class="topbar-actions">
+          <div class="stat-pill">
+            <i data-lucide="shield-check" class="text-success"></i>
+            <span id="topAccuracyText">AI Accuracy: 98.4%</span>
+          </div>
+
+          <button class="btn btn-secondary" id="btnThemeToggle" title="Toggle Light/Dark Theme">
+            <i data-lucide="moon" id="themeIcon"></i>
+          </button>
+
+          <button class="btn btn-primary" id="btnQuickUpload">
+            <i data-lucide="plus"></i> <span>Upload Document</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW 1: DASHBOARD -->
+      <section id="viewDashboard" class="view-panel active">
+        <!-- Hero Banner -->
+        <div class="hero-banner">
+          <div class="hero-text">
+            <div class="hero-pill">
+              <i data-lucide="zap"></i> Next-Gen Intelligent Document Processing
+            </div>
+            <h1>Automate Document Understanding at Scale</h1>
+            <p>Transform raw invoices, contracts, audits, and forms into validated data, discrepancy alerts, and grounded intelligence in seconds.</p>
+          </div>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" onclick="switchView('upload')">
+              <i data-lucide="upload-cloud"></i> Upload New Document
+            </button>
+            <button class="btn btn-glass btn-lg" onclick="loadDemoScenario(1)">
+              <i data-lucide="play"></i> Run Live Demo
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Total Documents</span>
+              <div class="kpi-icon indigo"><i data-lucide="file-text"></i></div>
+            </div>
+            <div class="kpi-value" id="kpiTotalDocs">5</div>
+            <div class="kpi-trend positive">
+              <i data-lucide="arrow-up-right"></i> <span>100% processed without OCR drop</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Auto-Validated (Green)</span>
+              <div class="kpi-icon emerald"><i data-lucide="check-circle-2"></i></div>
+            </div>
+            <div class="kpi-value" id="kpiValidDocs">1</div>
+            <div class="kpi-trend positive">
+              <i data-lucide="shield-check"></i> <span>Zero discrepancies found</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Needs Review / Warnings</span>
+              <div class="kpi-icon amber"><i data-lucide="alert-triangle"></i></div>
+            </div>
+            <div class="kpi-value" id="kpiReviewDocs">1</div>
+            <div class="kpi-trend warning">
+              <i data-lucide="clock"></i> <span>Requires supervisor approval</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Critical Risk / Errors</span>
+              <div class="kpi-icon rose"><i data-lucide="alert-octagon"></i></div>
+            </div>
+            <div class="kpi-value" id="kpiErrorDocs">3</div>
+            <div class="kpi-trend negative">
+              <i data-lucide="shield-alert"></i> <span>Math, expiry &amp; legal risks</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Two-Column Layout -->
+        <div class="dashboard-columns">
+          <!-- Recent Ingestion Queue -->
+          <div class="card recent-docs-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h3><i data-lucide="list"></i> Processed Document Queue</h3>
+                <span class="card-subtitle">Real-time status of ingested enterprise documents</span>
+              </div>
+              <button class="btn btn-sm btn-ghost" onclick="switchView('documents')">View All</button>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="dashboardTable">
+                <thead>
+                  <tr>
+                    <th>Document Name</th>
+                    <th>Category</th>
+                    <th>Confidence</th>
+                    <th>Validation</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardTableBody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Document Categories & Risk Distribution -->
+          <div class="card charts-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h3><i data-lucide="pie-chart"></i> Autonomous Classification Breakdown</h3>
+                <span class="card-subtitle">AI multi-schema recognition distribution</span>
+              </div>
+            </div>
+            <div class="category-bars" id="categoryBars">
+              <!-- Dynamically populated -->
+            </div>
+
+            <div class="insights-summary-banner">
+              <div class="summary-icon"><i data-lucide="sparkles"></i></div>
+              <div class="summary-content">
+                <h4>Portfolio Intelligence Highlight</h4>
+                <p id="portfolioSummaryText">3 anomalous conditions detected across vendor contracts and AP billing. 1 early payment discount ready for immediate execution ($273.90).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 2: DOCUMENT QUEUE & REPOSITORY -->
+      <section id="viewDocuments" class="view-panel">
+        <div class="view-header">
+          <div>
+            <h2>Document Intelligence Queue</h2>
+            <p class="text-muted">Filter, inspect, export, and manage all parsed enterprise documents.</p>
+          </div>
+          <div class="filter-controls">
+            <div class="filter-tabs" id="statusFilterTabs">
+              <button class="filter-btn active" data-status="all">All</button>
+              <button class="filter-btn" data-status="valid">Valid</button>
+              <button class="filter-btn" data-status="warning">Warnings</button>
+              <button class="filter-btn" data-status="error">Errors &amp; High Risk</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="table-container">
+            <table class="data-table" id="fullDocsTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Document Name</th>
+                  <th>Category</th>
+                  <th>AI Confidence</th>
+                  <th>Validation Status</th>
+                  <th>Pages</th>
+                  <th>Ingested At</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="fullDocsTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: UPLOAD & PROCESSING PIPELINE -->
+      <section id="viewUpload" class="view-panel">
+        <div class="view-header">
+          <div>
+            <h2>Autonomous Ingestion Pipeline</h2>
+            <p class="text-muted">Drag &amp; drop any PDF, scanned form, invoice, or contract for AI processing.</p>
+          </div>
+        </div>
+
+        <div class="upload-container">
+          <!-- Dropzone -->
+          <div class="dropzone" id="fileDropzone">
+            <div class="dropzone-icon">
+              <i data-lucide="cloud-arrow-up"></i>
+            </div>
+            <h3>Drag &amp; drop documents here</h3>
+            <p>Supports PDF, Scanned Images (PNG, JPG), or Plain Text documents up to 50MB</p>
+            <div class="dropzone-actions">
+              <label for="fileInput" class="btn btn-primary">
+                <i data-lucide="folder-search"></i> Browse Files
+              </label>
+              <input type="file" id="fileInput" accept=".pdf,.txt,.png,.jpg,.jpeg" style="display: none;" />
+            </div>
+          </div>
+
+          <!-- Live Processing Stage Stepper -->
+          <div class="processing-stepper-card" id="processingCard" style="display: none;">
+            <div class="stepper-header">
+              <div class="file-processing-info">
+                <i data-lucide="file-text" class="text-primary"></i>
+                <div class="file-text-meta">
+                  <h4 id="procFileName">Processing Document...</h4>
+                  <small id="procFileSize">Preparing AI models</small>
+                </div>
+              </div>
+              <div class="processing-spinner">
+                <span class="spinner-ring"></span>
+              </div>
+            </div>
+
+            <div class="pipeline-stages">
+              <div class="stage-step" id="stage1">
+                <div class="stage-circle"><i data-lucide="upload"></i></div>
+                <div class="stage-label">Upload</div>
+              </div>
+              <div class="stage-line" id="line1"></div>
+              <div class="stage-step" id="stage2">
+                <div class="stage-circle"><i data-lucide="scan-text"></i></div>
+                <div class="stage-label">OCR &amp; Layout</div>
+              </div>
+              <div class="stage-line" id="line2"></div>
+              <div class="stage-step" id="stage3">
+                <div class="stage-circle"><i data-lucide="tags"></i></div>
+                <div class="stage-label">Classification</div>
+              </div>
+              <div class="stage-line" id="line3"></div>
+              <div class="stage-step" id="stage4">
+                <div class="stage-circle"><i data-lucide="key"></i></div>
+                <div class="stage-label">Field Extraction</div>
+              </div>
+              <div class="stage-line" id="line4"></div>
+              <div class="stage-step" id="stage5">
+                <div class="stage-circle"><i data-lucide="shield-alert"></i></div>
+                <div class="stage-label">Validation Engine</div>
+              </div>
+              <div class="stage-line" id="line5"></div>
+              <div class="stage-step" id="stage6">
+                <div class="stage-circle"><i data-lucide="sparkles"></i></div>
+                <div class="stage-label">Insights</div>
+              </div>
+            </div>
+
+            <div class="stage-status-text" id="stageStatusMessage">
+              Initializing document extraction pipeline...
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: DOCUMENT INTELLIGENCE STUDIO (SPLIT SCREEN) -->
+      <section id="viewStudio" class="view-panel">
+        <!-- Studio Header Bar -->
+        <div class="studio-header">
+          <div class="studio-doc-meta">
+            <button class="btn btn-sm btn-secondary" onclick="switchView('documents')">
+              <i data-lucide="arrow-left"></i> Back
+            </button>
+            <div class="studio-title-block">
+              <h2 id="studioDocTitle">Select a Document</h2>
+              <div class="studio-meta-badges">
+                <span class="badge badge-category" id="studioCategoryBadge">Category: Commercial Invoice</span>
+                <span class="badge badge-conf" id="studioConfidenceBadge">AI Conf: 98%</span>
+                <span class="badge badge-status" id="studioStatusBadge">Status: Valid</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="studio-actions">
+            <button class="btn btn-secondary" id="btnReprocess" title="Re-run AI Extraction">
+              <i data-lucide="refresh-cw"></i> <span>Re-process</span>
+            </button>
+            <button class="btn btn-secondary" id="btnExportJson" title="Export Extracted JSON">
+              <i data-lucide="code"></i> <span>Export JSON</span>
+            </button>
+            <button class="btn btn-secondary" id="btnExportCsv" title="Export Extracted CSV">
+              <i data-lucide="file-spreadsheet"></i> <span>Export CSV</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Split Screen Workspace -->
+        <div class="studio-workspace">
+          <!-- Left: Document Previewer -->
+          <div class="studio-pane document-preview-pane">
+            <div class="pane-header">
+              <span class="pane-title"><i data-lucide="eye"></i> Original Document Preview</span>
+              <div class="preview-tools">
+                <a id="btnDownloadOriginal" class="btn btn-xs btn-ghost" target="_blank" download>
+                  <i data-lucide="download"></i> Download
+                </a>
+              </div>
+            </div>
+            <div class="preview-content-box" id="documentPreviewContainer">
+              <!-- PDF iframe or Text Viewer -->
+              <iframe id="pdfPreviewFrame" class="pdf-frame" src="about:blank"></iframe>
+              <div id="textFallbackPreview" class="text-preview-box" style="display: none;"></div>
+            </div>
+          </div>
+
+          <!-- Right: Intelligence Studio Tabs -->
+          <div class="studio-pane intelligence-pane">
+            <!-- Studio Sub-Navigation Tabs -->
+            <div class="studio-tabs">
+              <button class="studio-tab active" data-tab="fields">
+                <i data-lucide="list-tree"></i> <span>Extracted Fields</span>
+              </button>
+              <button class="studio-tab" data-tab="validation">
+                <i data-lucide="shield-alert"></i> <span>Validation &amp; Audit (<span id="studioIssuesCount">0</span>)</span>
+              </button>
+              <button class="studio-tab" data-tab="insights">
+                <i data-lucide="sparkles"></i> <span>Knowledge &amp; Insights</span>
+              </button>
+              <button class="studio-tab" data-tab="chat">
+                <i data-lucide="message-square-text"></i> <span>AI Assistant</span>
+              </button>
+            </div>
+
+            <!-- TAB 1: EXTRACTED FIELDS & LIVE EDITOR -->
+            <div class="studio-tab-content active" id="tabContentFields">
+              <div class="field-editor-banner">
+                <div>
+                  <h4><i data-lucide="edit-3"></i> Dynamic Schema Extraction</h4>
+                  <small>Click any field to edit its value. Validation and math rules recalculate instantly.</small>
+                </div>
+                <button class="btn btn-sm btn-primary" id="btnSaveFields">
+                  <i data-lucide="check"></i> Save &amp; Recalculate
+                </button>
+              </div>
+
+              <div class="fields-list-container" id="extractedFieldsList">
+                <!-- Dynamically populated field editors -->
+              </div>
+
+              <!-- Line Items Table (if present) -->
+              <div id="lineItemsSection" class="line-items-wrapper" style="display: none;">
+                <h4><i data-lucide="table"></i> Itemized Line Items</h4>
+                <div class="table-container">
+                  <table class="data-table line-items-table">
+                    <thead>
+                      <tr>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody id="lineItemsTableBody">
+                      <!-- Rendered dynamically -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 2: VALIDATION & ANOMALY DETECTION -->
+            <div class="studio-tab-content" id="tabContentValidation">
+              <div class="validation-summary-card">
+                <div class="val-score-circle" id="valScoreCircle">
+                  <span class="val-score-num" id="valScoreNum">100</span>
+                  <span class="val-score-label">Health</span>
+                </div>
+                <div class="val-score-text">
+                  <h3 id="valStatusHeading">All Rules Passed</h3>
+                  <p id="valStatusDesc">This document satisfies financial consistency, date order, and risk compliance policies.</p>
+                </div>
+              </div>
+
+              <div class="validation-issues-list" id="validationIssuesList">
+                <!-- Validation cards -->
+              </div>
+            </div>
+
+            <!-- TAB 3: KNOWLEDGE & ACTIONABLE INSIGHTS -->
+            <div class="studio-tab-content" id="tabContentInsights">
+              <div class="insights-container" id="insightsList">
+                <!-- Executive insight cards -->
+              </div>
+
+              <div class="entities-chip-section">
+                <h4><i data-lucide="fingerprint"></i> Extracted Named Entities</h4>
+                <div class="entities-chips" id="entitiesChips">
+                  <!-- Entity badges -->
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 4: GROUNDED AI CHAT ASSISTANT -->
+            <div class="studio-tab-content" id="tabContentChat">
+              <div class="chat-wrapper">
+                <!-- Suggested Prompt Chips -->
+                <div class="prompt-chips">
+                  <button class="chip" onclick="askPreset('What is the total amount and tax breakdown?')">
+                    💰 Total Amount &amp; Tax?
+                  </button>
+                  <button class="chip" onclick="askPreset('Are there any critical risks, errors or math discrepancies?')">
+                    ⚠️ Risks &amp; Errors?
+                  </button>
+                  <button class="chip" onclick="askPreset('What are the key deadlines and expiration dates?')">
+                    📅 Key Deadlines?
+                  </button>
+                  <button class="chip" onclick="askPreset('Summarize the core terms and insights for executive review.')">
+                    📋 Executive Summary
+                  </button>
+                </div>
+
+                <!-- Chat Messages Stream -->
+                <div class="chat-messages" id="chatMessagesStream">
+                  <div class="chat-msg assistant">
+                    <div class="msg-avatar"><i data-lucide="bot"></i></div>
+                    <div class="msg-bubble">
+                      <p>Hello! I am your <strong>OmniDoc Grounded Document Intelligence Assistant</strong>. Ask me anything about this document—I cite exact sections, fields, and verification rules.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Chat Input Form -->
+                <form id="chatForm" class="chat-input-form">
+                  <input type="text" id="chatInput" placeholder="Ask a question about this document..." autocomplete="off" />
+                  <button type="submit" class="btn btn-primary" id="btnSendChat">
+                    <i data-lucide="send"></i>
+                  </button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: CROSS-DOCUMENT PORTFOLIO INSIGHTS -->
+      <section id="viewPortfolio" class="view-panel">
+        <div class="view-header">
+          <div>
+            <h2>Cross-Document Knowledge Discovery &amp; Risk Matrix</h2>
+            <p class="text-muted">Multi-document synthesized intelligence across all enterprise suppliers, contracts, and facilities.</p>
+          </div>
+        </div>
+
+        <div class="portfolio-grid">
+          <!-- Active Suppliers & Entities -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i data-lucide="building-2"></i> Supplier &amp; Counterparty Concentration</h3>
+            </div>
+            <div class="card-body" id="portfolioVendorsList">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Critical Portfolio Risk Alerts -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i data-lucide="alert-octagon" class="text-danger"></i> Urgent Risk &amp; Non-Compliance Alerts</h3>
+            </div>
+            <div class="card-body" id="portfolioAlertsList">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Enterprise Deadlines Calendar Feed -->
+          <div class="card full-width">
+            <div class="card-header">
+              <h3><i data-lucide="calendar"></i> Master Compliance &amp; Payment Calendar</h3>
+            </div>
+            <div class="card-body" id="portfolioDeadlinesList">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Toast Notification Center -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Auth Modal (Signup / Login) -->
+  <div id="authModal" class="modal-backdrop" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modalAuthTitle">Document Processing Portal Access</h3>
+        <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="tabBtnLogin" onclick="switchAuthTab('login')">Sign In</button>
+          <button class="auth-tab-btn" id="tabBtnRegister" onclick="switchAuthTab('register')">Create Account</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="formLogin" class="auth-form">
+          <div class="form-group">
+            <label>Username or Email</label>
+            <input type="text" id="loginUsername" required placeholder="e.g. demouser" value="demouser" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPassword" required placeholder="••••••••" value="demo12345" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          <button type="button" class="btn btn-glass btn-block" onclick="instantDemoLogin()">
+            ⚡ Instant 1-Click Demo Login
+          </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="formRegister" class="auth-form" style="display: none;">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="regFullName" required placeholder="Dr. Sarah Mitchell" />
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="regUsername" required placeholder="smitchell" />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="regEmail" required placeholder="sarah@enterprise.com" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="regPassword" required placeholder="••••••••" />
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <select id="regRole">
+              <option value="Lead Document Auditor">Lead Document Auditor</option>
+              <option value="Accounts Payable Manager">Accounts Payable Manager</option>
+              <option value="Senior Legal Counsel">Senior Legal Counsel</option>
+              <option value="Compliance Inspector">Compliance Inspector</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
